@@ -1,8 +1,3 @@
-from algopy.graph import Graph
-
-"""
-GREEDY COLORATION
-"""
 def color_greedy(G):
     result = [-1] * G.order
     result[0] = 0
@@ -155,22 +150,22 @@ def color_rlf(G):
         # Si will be colored by nbcolor
         Si = []
         # find the max degree in X
-        indM = -1
-        max = -1
+        indm = -1
+        maximum = -1
         for i in range(len(x)):
             deg = len(x_adjlists[i])
-            if (deg < max):
+            if deg < maximum:
                 continue
-            if (deg > max or len(G.adjlists[x[i]]) > len(G.adjlists[x[indM]])):
-                indM = i
-                max = deg
+            if deg > maximum or len(G.adjlists[x[i]]) > len(G.adjlists[x[indm]]):
+                indm = i
+                maximum = deg
 
-        Si.append(x[indM])
-        del x[indM]
+        Si.append(x[indm])
+        del x[indm]
 
         while x:
             candidates = []
-            max = -1
+            maximum = -1
             for i in range(len(x)):
                 # not currently adjacent to any vertex in Si
                 good = True
@@ -187,31 +182,31 @@ def color_rlf(G):
                         if adjj in Si:
                             nbneighbor += 1
                             break
-                if nbneighbor < max:
+                if nbneighbor < maximum:
                     continue
-                elif nbneighbor == max:
+                elif nbneighbor == maximum:
                     candidates.append(i)
                 else:
-                    max = nbneighbor
+                    maximum = nbneighbor
                     candidates = [i]
 
             if len(candidates) == 0:
                 break
             elif len(candidates) == 1:
-                indM = candidates[0]
+                indm = candidates[0]
             else:
                 # find the selecting the vertex with the minimum number of neighbors not in Si
-                min = G.order
+                minimum = G.order
                 for i in range(len(candidates)):
                     nbneighbor = 0
                     for adj in x_adjlists[candidates[i]]:
-                        if adjj not in Si:
+                        if adj not in Si:
                             nbneighbor += 1
-                    if min > nbneighbor:
-                        min = nbneighbor
-                        indM = candidates[i]
-            Si.append(x[indM])
-            del x[indM]
+                    if minimum > nbneighbor:
+                        minimum = nbneighbor
+                        indm = candidates[i]
+            Si.append(x[indm])
+            del x[indm]
 
         # set nbcolor to Si
         # and remove Si from x_adjlists
