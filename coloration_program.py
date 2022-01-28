@@ -1,3 +1,5 @@
+from algopy import graph
+
 def color_greedy(G):
     result = [-1] * G.order
     result[0] = 0
