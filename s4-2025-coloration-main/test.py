@@ -15,3 +15,6 @@ if __name__ == '__main__':
 
     print("rlf")
     print(run_verif_coloration(color_rlf, files))
+
+    print("ido")
+    print(run_verif_coloration(ido, files))

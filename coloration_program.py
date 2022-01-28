@@ -223,5 +223,75 @@ def color_rlf(G):
     return nbcolor, result
 
 
+def __step3(G, color, M):
+    maxcolor = []
+    maxcol = 0
+    for i in range(G.order):
+        if not M[i]:
+            nbcolor = 0
+            for adj in G.adjlists[i]:
+                if color[adj] != -1:
+                    nbcolor += 1
+            if maxcol < nbcolor:
+                maxcol = nbcolor
+                maxcolor = [[i, len(G.adjlists[i])]]
+            elif maxcol == nbcolor:
+                maxcolor.append([i, len(G.adjlists[i])])
+    if len(maxcolor) == 1:
+        return maxcolor[0][0]
+    ind = maxcolor[0][0]
+    maximum = 0
+    for el in maxcolor:
+        if maximum < el[1]:
+            ind = el[0]
+            maximum = el[1]
+    return ind
+
+
+def ido(G):
+    degrees = []
+    M = [False] * G.order
+    color = [0]
+    result = [-1] * G.order
+    maximum = 0
+    nbcolor = 1
+    ind = 0
+    for i in range(G.order):
+        if len(G.adjlists[i]) > maximum:
+            ind = i
+            maximum = len(G.adjlists[i])
+        degrees.append(len(G.adjlists[i]))
+    result[ind] = color[0]
+    M[ind] = True
+    available = [False] * G.order
+    while M != [True] * G.order:
+        ind = __step3(G, result, M)
+        M[ind] = True
+        for y in G.adjlists[ind]:
+            if result[y] != -1:
+                available[result[y]] = True
+
+        cr = 0
+        while cr < G.order:
+            if not available[cr]:
+                break
+            cr += 1
+
+        if cr not in color:
+            color.append(cr)
+            nbcolor += 1
+        result[ind] = cr
+        for y in G.adjlists[ind]:
+            if result[y] != -1:
+                available[result[y]] = False
+
+    for i in range(len(result)):
+        result[i] += 1
+    return nbcolor, result
+
+
+
+
+
 
 
