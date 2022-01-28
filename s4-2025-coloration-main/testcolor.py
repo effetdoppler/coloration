@@ -6,6 +6,7 @@ S4 - Coloration function tests for students
 
 from algopy import graph
 import os
+import time
 
 def __graphlist(dirpath):
     """builds a list of graphs from a given directory
@@ -65,6 +66,7 @@ def run_verif_coloration(f, dirpath):
     Returns:
         the result list: list of color numbers for each graph
     """
+    start = time.time()
     tests = __graphlist(dirpath)
     results = []
     for G in tests:
@@ -75,6 +77,7 @@ def run_verif_coloration(f, dirpath):
             results.append((nb, "wrong chromatic number"))
         else:
             results.append(nb)
+    print("...............time spent: " + str(round(time.time()-start, 3)) + " s")
     return results
 
 
