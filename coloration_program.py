@@ -137,7 +137,7 @@ def color_weslsh_powell(G):
 
     return nbcolor, result
 
-
+# https://www.researchgate.net/publication/311916215_A_Performance_Comparison_of_Graph_Coloring_Algorithms
 def color_rlf(G):
     nbcolor = 0
     if G.order == 0:
@@ -165,17 +165,16 @@ def color_rlf(G):
         Si.append(x[indm])
         del x[indm]
 
-        u = []
-        vv = []
+        u = set()
+        vv = set(x)
         for v in x:
             if v in x_adjlists[Si[-1]]:
-                u.append(v)
-            else:
-                vv.append(v)
+                u.add(v)
+                vv.remove(v)
         while x:
             for v in x_adjlists[Si[-1]]:
                 if v not in u:
-                    u.append(v)
+                    u.add(v)
                     vv.remove(v)
             maximum = -1
             candidates = []
