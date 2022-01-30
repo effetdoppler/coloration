@@ -194,19 +194,7 @@ def color_rlf(G):
 
             if len(candidates) == 0:
                 break
-            elif len(candidates) == 1:
-                indm = candidates[0]
-            else:
-                # find the selecting the vertex with the minimum number of neighbors not in Si
-                minimum = G.order
-                for i in range(len(candidates)):
-                    nbneighbor = 0
-                    for adj in x_adjlists[candidates[i]]:
-                        if adj not in Si:
-                            nbneighbor += 1
-                    if minimum > nbneighbor:
-                        minimum = nbneighbor
-                        indm = candidates[i]
+            indm = candidates[0]
             Si.append(x[indm])
             del x[indm]
 
