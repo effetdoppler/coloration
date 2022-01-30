@@ -151,7 +151,7 @@ def color_rlf(G):
         nbcolor += 1
         # Si will be colored by nbcolor
         Si = []
-        # find the max degree in X
+        # find the maximum degree in X
         indm = -1
         maximum = -1
         for i in range(len(x)):
@@ -165,38 +165,40 @@ def color_rlf(G):
         Si.append(x[indm])
         del x[indm]
 
+        u = []
+        vv = []
+        for v in x:
+            if v in x_adjlists[Si[-1]]:
+                u.append(v)
+            else:
+                vv.append(v)
         while x:
-            candidates = []
+            for v in x_adjlists[Si[-1]]:
+                if v not in u:
+                    u.append(v)
+                    vv.remove(v)
             maximum = -1
-            for i in range(len(x)):
-                # not currently adjacent to any vertex in Si
-                good = True
-                for adj in x_adjlists[x[i]]:
-                    if adj in Si:
-                        good = False
-                        break
-                if not good:
-                    continue
+            candidates = []
+            for v in vv:
                 # calculate number of neighbors that are adjacent to vertices in Si
                 nbneighbor = 0
-                for adj in x_adjlists[x[i]]:
-                    for adjj in x_adjlists[adj]:
-                        if adjj in Si:
-                            nbneighbor += 1
-                            break
+                for adj in x_adjlists[v]:
+                    if adj in u:
+                        nbneighbor += 1
                 if nbneighbor < maximum:
                     continue
                 elif nbneighbor == maximum:
-                    candidates.append(i)
+                    candidates.append(v)
                 else:
                     maximum = nbneighbor
-                    candidates = [i]
+                    candidates = [v]
 
             if len(candidates) == 0:
                 break
-            indm = candidates[0]
-            Si.append(x[indm])
-            del x[indm]
+            v = candidates[0]
+            Si.append(v)
+            x.remove(v)
+            vv.remove(v)
 
         # set nbcolor to Si
         # and remove Si from x_adjlists
@@ -207,9 +209,7 @@ def color_rlf(G):
             for i in range(len(l)-1, -1, -1):
                 if l[i] in Si:
                     del l[i]
-
     return nbcolor, result
-
 
 def __step3(G, color, M):
     maxcolor = []
