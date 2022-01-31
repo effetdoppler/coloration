@@ -70,6 +70,18 @@ def run_verif_coloration(f, dirpath):
     tests = __graphlist(dirpath)
     results = []
     for G in tests:
+        N = 1
+        if N > 1:
+            nb = G.order
+            for i in range(1,N):
+                base = i * nb
+                for n in range(nb):
+                    li = G.adjlists[n].copy()
+                    for k in range(len(li)):
+                        li[k] += base
+                    G.adjlists.append(li)
+            G.order = N * G.order
+
         (nb, colors) = f(G)
         if not __testcolors(G, colors):
             results.append((None, "wrong coloration"))
