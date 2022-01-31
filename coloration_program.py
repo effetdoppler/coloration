@@ -210,9 +210,10 @@ def color_rlf(G):
                     del l[i]
     return nbcolor, result
 
-def __step3(G, color, M):
-    maxcolor = []
+def __ido_step3(G, color, M):
+    maxcol_ind = []
     maxcol = 0
+    # The number of the colored adjacent vertices is calculated for every uncolored vertices.
     for i in range(G.order):
         if not M[i]:
             nbcolor = 0
@@ -221,22 +222,23 @@ def __step3(G, color, M):
                     nbcolor += 1
             if maxcol < nbcolor:
                 maxcol = nbcolor
-                maxcolor = [[i, len(G.adjlists[i])]]
+                maxcol_ind = [i]
             elif maxcol == nbcolor:
-                maxcolor.append([i, len(G.adjlists[i])])
-    if len(maxcolor) == 1:
-        return maxcolor[0][0]
-    ind = maxcolor[0][0]
+                maxcol_ind.append(i)
+    # the uncolored vertex whose colored neighboring vertices are the maximum is selected.
+    if len(maxcol_ind) == 1:
+        return maxcol_ind[0]
+    # If more than one vertex provides this condition, the vertex which has the largest degree is selected.
+    ind = maxcol_ind[0]
     maximum = 0
-    for el in maxcolor:
-        if maximum < el[1]:
-            ind = el[0]
-            maximum = el[1]
+    for el in maxcol_ind:
+        if maximum < len(G.adjlists[el]):
+            ind = el
+            maximum = len(G.adjlists[el])
     return ind
 
-
-def ido(G):
-    degrees = []
+# https://www.researchgate.net/publication/311916215_A_Performance_Comparison_of_Graph_Coloring_Algorithms
+def color_ido(G):
     M = [False] * G.order
     color = [0]
     result = [-1] * G.order
@@ -247,12 +249,12 @@ def ido(G):
         if len(G.adjlists[i]) > maximum:
             ind = i
             maximum = len(G.adjlists[i])
-        degrees.append(len(G.adjlists[i]))
+    # Step 2: The vertex that has the largest degree is colored with the first color
     result[ind] = color[0]
     M[ind] = True
     available = [False] * G.order
     while M != [True] * G.order:
-        ind = __step3(G, result, M)
+        ind = __ido_step3(G, result, M)
         M[ind] = True
         for y in G.adjlists[ind]:
             if result[y] != -1:
